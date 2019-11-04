@@ -1,0 +1,31 @@
+{
+  "name": "muxu-server",
+  "version": "0.1.0",
+  "description": "A React SSR server",
+  "main": "./dist/server.js",
+  "repository": "https://github.com/Melvin-klein/muxu-server.git",
+  "author": "Melvine Nargeot <melvine.nargeot@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4",
+    "@babel/preset-env": "^7.6.3",
+    "@babel/preset-flow": "^7.0.0",
+    "babel-eslint": "^10.0.3",
+    "babel-jest": "^24.9.0",
+    "eslint": "^6.6.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-flowtype": "^4.3.0",
+    "flow-bin": "^0.111.1",
+    "jest": "^24.9.0"
+  },
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint src tests",
+    "build": "babel src/ -d dist/",
+    "test": "jest --silent",
+    "prepublish": "yarn lint && yarn build && yarn test"
+  }
+}

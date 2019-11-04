@@ -1,0 +1,8 @@
+{
+  "rules": {
+    "flowtype/require-valid-file-annotation": [
+      2,
+      "never"
+    ]
+  }
+}
