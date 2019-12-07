@@ -20,7 +20,7 @@ test('Server can listen on a port', async () => {
         port: 5000,
     });
 
-    let response = await Axios.get('http://localhost:5000');
+    const response = await Axios.get('http://localhost:5000');
     server.stop();
 
     expect(response.status).toBe(200);
