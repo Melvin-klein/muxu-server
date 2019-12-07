@@ -14,6 +14,7 @@
     "@babel/core": "^7.6.4",
     "@babel/preset-env": "^7.6.3",
     "@babel/preset-flow": "^7.0.0",
+    "axios": "^0.19.0",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
     "eslint": "^6.6.0",
@@ -24,7 +25,7 @@
   },
   "scripts": {
     "lint": "./node_modules/.bin/eslint src tests",
-    "build": "babel src/ -d dist/",
+    "build": "babel src/ -d dist/ --ignore src/interfaces",
     "test": "jest --silent",
     "prepublish": "yarn lint && yarn build && yarn test"
   }
