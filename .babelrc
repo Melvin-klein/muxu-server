@@ -8,6 +8,7 @@
         }
       }
     ],
-    "@babel/preset-flow"
+    "@babel/preset-flow",
+    "@babel/preset-react"
   ]
 }
