@@ -1,4 +1,3 @@
-const Axios = require('axios');
 const Server = require('../dist/server');
 
 const TestComponent = () => {};
@@ -11,10 +10,11 @@ test('Can plug a main component to the server', () => {
     expect(server.mainComponent).not.toBeNull();
 });
 
-test('Server can listen on a port', async () => {
+/* test('Server can listen on a port', async () => {
     const server = new Server();
 
     server.plug(TestComponent);
+
 
     await server.run({
         port: 5000,
@@ -24,4 +24,4 @@ test('Server can listen on a port', async () => {
     server.stop();
 
     expect(response.status).toBe(200);
-});
+}); */
