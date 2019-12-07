@@ -1,5 +1,5 @@
 // @flow
 
-module.exports = class ServerOptionsInterface {
+export type ServerOptionsInterface = {
     port: number
 };
