@@ -12,7 +12,7 @@ const app: $Application = express();
 class Server {
     mainComponent: number | null;
     app: $Application;
-    expressServer: http$Server|null;
+    expressServer: http$Server | null;
 
     /**
      * Server constructor
@@ -35,8 +35,8 @@ class Server {
     /**
      * Run the web server
      *
-     * @param options
-     * @returns {Promise<void>}
+     * @param {ServerOptionsInterface} options
+     * @return {Promise<void>}
      */
     run(options: ServerOptionsInterface): Promise<void> {
         return new Promise((resolve, reject) => {
@@ -44,7 +44,7 @@ class Server {
                 console.error('[Muxu Server] - No main component has been plugged to the server. Did you forget to call the server "plug()" method ?');
                 console.error('[Muxu Server] - Server can\'t start');
 
-                reject();
+                reject(new Error());
             }
 
             try {
@@ -58,16 +58,19 @@ class Server {
                     resolve();
                 });
             } catch (e) {
-                reject();
+                reject(new Error());
             }
         });
     }
 
-    stop (): void {
+    /**
+     * Stop the server
+     */
+    stop(): void {
         if (this.expressServer !== null) {
             this.expressServer.close(() => {
-                console.log('[Muxu Server] - Server has been shut down.')
-            })
+                console.log('[Muxu Server] - Server has been shut down.');
+            });
         }
     }
 }
