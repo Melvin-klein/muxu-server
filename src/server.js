@@ -11,13 +11,15 @@ const app: $Application = express();
  */
 class Server {
     mainComponent: number | null;
-    app: any;
+    app: $Application;
+    expressServer: http$Server|null;
 
     /**
      * Server constructor
      */
     constructor() {
         this.mainComponent = null;
+        this.expressServer = null;
         this.app = app;
     }
 
@@ -33,23 +35,40 @@ class Server {
     /**
      * Run the web server
      *
-     * @param {ServerOptions} options
+     * @param options
+     * @returns {Promise<void>}
      */
-    run(options: ServerOptionsInterface): void {
-        if (this.mainComponent === null) {
-            console.error('No main component has been plugged to the server. Did you forget to call the server "plug()" method ?');
-            console.error('Server can\'t start');
+    run(options: ServerOptionsInterface): Promise<void> {
+        return new Promise((resolve, reject) => {
+            if (this.mainComponent === null) {
+                console.error('[Muxu Server] - No main component has been plugged to the server. Did you forget to call the server "plug()" method ?');
+                console.error('[Muxu Server] - Server can\'t start');
 
-            return;
+                reject();
+            }
+
+            try {
+                this.app.get('/*', function(req: $Request, res: $Response) {
+                    res.send('Hello World!');
+                });
+
+                this.expressServer = this.app.listen(options.port, function() {
+                    console.log(`[Muxu Server] - Server is now listening on port : ${options.port}`);
+
+                    resolve();
+                });
+            } catch (e) {
+                reject();
+            }
+        });
+    }
+
+    stop (): void {
+        if (this.expressServer !== null) {
+            this.expressServer.close(() => {
+                console.log('[Muxu Server] - Server has been shut down.')
+            })
         }
-
-        app.get('/*', function(req: $Request, res: $Response) {
-            res.send('Hello World!');
-        });
-
-        app.listen(options.port, function() {
-            console.log(`[Muxu Server] - Server is now listening on port : ${options.port}`);
-        });
     }
 }
 
