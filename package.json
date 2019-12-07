@@ -1,6 +1,6 @@
 {
   "name": "muxu-server",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A React SSR server",
   "main": "./dist/server.js",
   "repository": "https://github.com/Melvin-klein/muxu-server.git",
