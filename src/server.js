@@ -35,12 +35,19 @@ class Server {
      * @param {ServerOptions} options
      */
     run(options: ServerOptionsInterface): void {
+        if (this.mainComponent === null) {
+            console.error("No main component has been plugged to the server. Did you forget to call the server 'plug()' method ?");
+            console.error("Server can't start");
+
+            return;
+        }
+
         app.get('/*', function(req, res) {
             res.send('Hello World!');
         });
 
         app.listen(options.port, function() {
-            console.log(`Server is now listening on port : ${options.port}`);
+            console.log(`[Muxu Server] - Server is now listening on port : ${options.port}`);
         });
     }
 }
