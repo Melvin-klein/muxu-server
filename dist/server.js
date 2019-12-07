@@ -31,8 +31,8 @@ class Server {
   /**
    * Run the web server
    *
-   * @param options
-   * @returns {Promise<void>}
+   * @param {ServerOptionsInterface} options
+   * @return {Promise<void>}
    */
 
 
@@ -41,7 +41,7 @@ class Server {
       if (this.mainComponent === null) {
         console.error('[Muxu Server] - No main component has been plugged to the server. Did you forget to call the server "plug()" method ?');
         console.error('[Muxu Server] - Server can\'t start');
-        reject();
+        reject(new Error());
       }
 
       try {
@@ -53,10 +53,14 @@ class Server {
           resolve();
         });
       } catch (e) {
-        reject();
+        reject(new Error());
       }
     });
   }
+  /**
+   * Stop the server
+   */
+
 
   stop() {
     if (this.expressServer !== null) {
