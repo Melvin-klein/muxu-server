@@ -10,12 +10,13 @@ var express = require('express');
 
 var app = express();
 
-var ServerOptionsInterface = require('./interfaces/serverOptionsInterface');
+/*interface ServerOptionsInterface {
+    port: number
+}*/
+
 /**
  * @class Server
  */
-
-
 var Server =
 /*#__PURE__*/
 function () {
@@ -53,7 +54,7 @@ function () {
         res.send('Hello World!');
       });
       app.listen(options.port, function () {
-        console.log('Example app listening on port 3000!');
+        console.log("Server is now listening on port : ".concat(options.port));
       });
     }
   }]);
