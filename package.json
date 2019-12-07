@@ -7,9 +7,11 @@
   "author": "Melvine Nargeot <melvine.nargeot@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "react-dom": "^16.12.0"
   },
   "devDependencies": {
+    "react": "^16.12.0",
     "@babel/cli": "^7.6.4",
     "@babel/core": "^7.6.4",
     "@babel/preset-env": "^7.6.3",
