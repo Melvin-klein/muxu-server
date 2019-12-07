@@ -1,8 +1,9 @@
 // @flow
 
-const express = require('express');
+import express from 'express';
+import type { ServerOptionsInterface } from './interfaces/serverOptionsInterface';
+
 const app = express();
-const ServerOptionsInterface = require('./interfaces/serverOptionsInterface');
 
 /**
  * @class Server
@@ -39,7 +40,7 @@ class Server {
         });
 
         app.listen(options.port, function() {
-            console.log('Example app listening on port 3000!');
+            console.log(`Server is now listening on port : ${options.port}`);
         });
     }
 }
