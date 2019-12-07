@@ -11,20 +11,17 @@ test('Can plug a main component to the server', () => {
     expect(server.mainComponent).not.toBeNull();
 });
 
-test('Server can listen on a port', done => {
+test('Server can listen on a port', async () => {
     const server = new Server();
 
     server.plug(TestComponent);
 
-    server.run({
+    await server.run({
         port: 5000,
-    }).then(() => {
-        Axios.get('http://localhost:5000')
-            .then(response => {
-                expect(response.status).toBe(200);
-                server.stop();
-
-                done();
-            })
     });
+
+    let response = await Axios.get('http://localhost:5000');
+    server.stop();
+
+    expect(response.status).toBe(200);
 });
