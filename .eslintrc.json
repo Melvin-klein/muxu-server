@@ -6,7 +6,8 @@
     },
     "extends": [
         "google",
-        "plugin:flowtype/recommended"
+        "plugin:flowtype/recommended",
+        "plugin:react/recommended"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -21,10 +22,13 @@
         "flowtype/require-valid-file-annotation": [
             2,
             "always"
-        ]
+        ],
+        "react/react-in-jsx-scope": 0,
+        "new-cap": 0
     },
     "parser": "babel-eslint",
     "plugins": [
-        "flowtype"
+        "flowtype",
+        "react"
     ]
 }
