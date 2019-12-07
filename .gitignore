@@ -88,5 +88,5 @@ typings/
 .dynamodb/
 
 .idea
-./dist/index.js
 dist/index.js
+dist/index.html
