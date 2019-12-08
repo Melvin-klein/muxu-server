@@ -48,7 +48,7 @@ class Server {
    */
 
 
-  assetsDir(path) {
+  public(path) {
     this.assetsDirPath = path;
   }
   /**
