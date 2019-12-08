@@ -6,7 +6,6 @@
     },
     "extends": [
         "google",
-        "plugin:flowtype/recommended",
         "plugin:react/recommended"
     ],
     "globals": {
@@ -19,16 +18,10 @@
     "rules": {
         "max-len": 0,
         "indent": ["error", 4],
-        "flowtype/require-valid-file-annotation": [
-            2,
-            "always"
-        ],
-        "react/react-in-jsx-scope": 0,
-        "new-cap": 0
+        "react/react-in-jsx-scope": 0
     },
     "parser": "babel-eslint",
     "plugins": [
-        "flowtype",
         "react"
     ]
 }
