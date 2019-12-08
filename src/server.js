@@ -2,6 +2,7 @@ import fs from 'fs';
 import express from 'express';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
+import {StaticRouter} from 'react-router-dom';
 
 const app = express();
 
@@ -49,7 +50,7 @@ class Server {
      *
      * @param {React.Component} component
      */
-    plug(component): void {
+    plug(component) {
         this.mainComponent = component;
     }
 
@@ -68,13 +69,13 @@ class Server {
             }
 
             try {
-                const serverRenderedContent = this.render();
+                const renderFunction = this.getRenderFunction();
 
                 if (this.assetsDirPath !== null) {
                     this.app.use(express.static(this.assetsDirPath, {maxAge: '30d'}));
                 }
 
-                this.app.get('/*', serverRenderedContent);
+                this.app.get('/*', renderFunction);
 
                 this.expressServer = this.app.listen(options.port, () => {
                     console.log(`[Muxu Server] - Server is now listening on port : ${options.port}`);
@@ -114,23 +115,32 @@ class Server {
      *
      * @return {Function}
      */
-    render() {
+    getRenderFunction() {
         return (req, res) => {
-            const MainComponent = this.mainComponent;
-
             if (this.baseHtmlString === null) {
                 console.error('[Muxu Server] - Html is missing for render');
 
                 return null;
             }
 
-            return res.send(
-                this.baseHtmlString.replace(
-                    '<div id="root"></div>',
-                    `<div id="root">${ReactDOMServer.renderToString(<MainComponent />)}</div>`,
-                ),
-            );
+            const location = req.url;
+            const context = {};
+
+            return res.send(this.getCompiledHTML(location, context));
         };
+    }
+
+    getCompiledHTML(location, context) {
+        const MainComponent = this.mainComponent;
+
+        this.baseHtmlString.replace(
+            '<div id="root"></div>',
+            `<div id="root">${ReactDOMServer.renderToString((
+                <StaticRouter location={location} context={context}>
+                    <MainComponent/>
+                </StaticRouter>
+            ))}</div>`,
+        )
     }
 
     /**
