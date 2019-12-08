@@ -4,17 +4,16 @@ var _fs = _interopRequireDefault(require("fs"));
 
 var _express = _interopRequireDefault(require("express"));
 
+var _react = _interopRequireDefault(require("react"));
+
 var _server = _interopRequireDefault(require("react-dom/server"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const app = (0, _express.default)();
-
-const router = _express.default.Router();
 /**
  * @class Server
  */
-
 
 class Server {
   /**
@@ -24,8 +23,8 @@ class Server {
     this.mainComponent = null;
     this.expressServer = null;
     this.assetsDirPath = null;
+    this.baseHtmlString = null;
     this.app = app;
-    this.router = router;
   }
   /**
    * Set the HTML file where main component will be rendered
@@ -55,7 +54,7 @@ class Server {
   /**
    * Plug the main component to the server
    *
-   * @param {any} component
+   * @param {React.Component} component
    */
 
 
@@ -65,43 +64,29 @@ class Server {
   /**
    * Run the web server
    *
-   * @param {ServerOptionsInterface} options
+   * @param {object} options
    * @return {Promise<void>}
    */
 
 
   run(options) {
     return new Promise((resolve, reject) => {
-      // Check Main Component
-      if (this.mainComponent === null) {
-        console.error('[Muxu Server] - No main component has been plugged to the server. Did you forget to call the server "plug()" method ?');
-        console.error('[Muxu Server] - Server can\'t start');
-        reject(new Error());
-      } // Check Base HTML
-
-
-      if (this.baseHtmlString === null) {
-        console.error('[Muxu Server] - No HTML has been provided to the server. Did you forget to call the server "html()" method ?');
+      if (!this.isReadyToStart()) {
         console.error('[Muxu Server] - Server can\'t start');
         reject(new Error());
       }
 
       try {
-        const serverRenderedContent = (req, res, next) => {
-          const MainComponent = this.mainComponent;
-          return res.send(this.baseHtmlString.replace('<div id="root"></div>', `<div id="root">${_server.default.renderToString(React.createElement(MainComponent, null))}</div>`));
-        };
-
-        router.use('^/$', serverRenderedContent);
+        const serverRenderedContent = this.render();
 
         if (this.assetsDirPath !== null) {
-          router.use(_express.default.static(this.assetsDirPath, {
+          this.app.use(_express.default.static(this.assetsDirPath, {
             maxAge: '30d'
           }));
         }
 
-        this.app.use(this.router);
-        this.expressServer = this.app.listen(options.port, function () {
+        this.app.get('/*', serverRenderedContent);
+        this.expressServer = this.app.listen(options.port, () => {
           console.log(`[Muxu Server] - Server is now listening on port : ${options.port}`);
           resolve();
         });
@@ -109,6 +94,46 @@ class Server {
         reject(new Error());
       }
     });
+  }
+  /**
+   * Define is the server has all needed information to start
+   *
+   * @return {boolean}
+   */
+
+
+  isReadyToStart() {
+    if (this.mainComponent === null) {
+      console.error('[Muxu Server] - No main component has been plugged to the server. Did you forget to call the server "plug()" method ?');
+      return false;
+    } // Check Base HTML
+
+
+    if (this.baseHtmlString === null) {
+      console.error('[Muxu Server] - No HTML has been provided to the server. Did you forget to call the server "html()" method ?');
+      return false;
+    }
+
+    return true;
+  }
+  /**
+   * Render function for SSR
+   *
+   * @return {Function}
+   */
+
+
+  render() {
+    return (req, res) => {
+      const MainComponent = this.mainComponent;
+
+      if (this.baseHtmlString === null) {
+        console.error('[Muxu Server] - Html is missing for render');
+        return null;
+      }
+
+      return res.send(this.baseHtmlString.replace('<div id="root"></div>', `<div id="root">${_server.default.renderToString(_react.default.createElement(MainComponent, null))}</div>`));
+    };
   }
   /**
    * Stop the server
