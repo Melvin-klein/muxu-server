@@ -130,6 +130,12 @@ class Server {
         };
     }
 
+    /**
+     * Return compiled HTML
+     *
+     * @param {string} location
+     * @param {object} context
+     */
     getCompiledHTML(location, context) {
         const MainComponent = this.mainComponent;
 
@@ -140,7 +146,7 @@ class Server {
                     <MainComponent/>
                 </StaticRouter>
             ))}</div>`,
-        )
+        );
     }
 
     /**
