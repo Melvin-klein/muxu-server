@@ -30,6 +30,6 @@
     "lint": "./node_modules/.bin/eslint src tests",
     "build": "babel src/ -d dist/ --ignore src/interfaces",
     "test": "jest --silent",
-    "prepublish": "yarn lint && yarn build && yarn test"
+    "prepare": "yarn lint && yarn build && yarn test"
   }
 }
