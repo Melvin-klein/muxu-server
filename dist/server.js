@@ -8,6 +8,8 @@ var _react = _interopRequireDefault(require("react"));
 
 var _server = _interopRequireDefault(require("react-dom/server"));
 
+var _reactRouterDom = require("react-router-dom");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const app = (0, _express.default)();
@@ -77,7 +79,7 @@ class Server {
       }
 
       try {
-        const serverRenderedContent = this.render();
+        const renderFunction = this.getRenderFunction();
 
         if (this.assetsDirPath !== null) {
           this.app.use(_express.default.static(this.assetsDirPath, {
@@ -85,7 +87,7 @@ class Server {
           }));
         }
 
-        this.app.get('/*', serverRenderedContent);
+        this.app.get('/*', renderFunction);
         this.expressServer = this.app.listen(options.port, () => {
           console.log(`[Muxu Server] - Server is now listening on port : ${options.port}`);
           resolve();
@@ -123,17 +125,32 @@ class Server {
    */
 
 
-  render() {
+  getRenderFunction() {
     return (req, res) => {
-      const MainComponent = this.mainComponent;
-
       if (this.baseHtmlString === null) {
         console.error('[Muxu Server] - Html is missing for render');
         return null;
       }
 
-      return res.send(this.baseHtmlString.replace('<div id="root"></div>', `<div id="root">${_server.default.renderToString(_react.default.createElement(MainComponent, null))}</div>`));
+      const location = req.url;
+      const context = {};
+      return res.send(this.getCompiledHTML(location, context));
     };
+  }
+  /**
+   * Return compiled HTML
+   *
+   * @param {string} location
+   * @param {object} context
+   */
+
+
+  getCompiledHTML(location, context) {
+    const MainComponent = this.mainComponent;
+    this.baseHtmlString.replace('<div id="root"></div>', `<div id="root">${_server.default.renderToString(_react.default.createElement(_reactRouterDom.StaticRouter, {
+      location: location,
+      context: context
+    }, _react.default.createElement(MainComponent, null)))}</div>`);
   }
   /**
    * Stop the server
