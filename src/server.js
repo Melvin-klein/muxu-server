@@ -40,7 +40,7 @@ class Server {
      *
      * @param {string} path
      */
-    assetsDir(path) {
+    public(path) {
         this.assetsDirPath = path;
     }
 
